@@ -1,0 +1,2 @@
+/* El estado vacío reutiliza la base de StateMessage; acá van sus ajustes propios. */
+.mba-state--empty { border-style: dashed; }

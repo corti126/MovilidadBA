@@ -1,0 +1,37 @@
+.mba-favorites__list { display: grid; gap: 8px; }
+.mba-favorites__item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-l);
+}
+.mba-favorites__icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: var(--brand-050);
+  color: var(--brand-500);
+}
+.mba-favorites__text { display: grid; min-width: 0; }
+.mba-favorites__label {
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mba-favorites__kind { font-size: 0.78rem; color: var(--text-faint); text-transform: capitalize; }
+.mba-favorites__remove {
+  border: none;
+  background: none;
+  color: var(--text-faint);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 8px;
+}
+.mba-favorites__remove:hover { color: var(--danger); }

@@ -1,0 +1,18 @@
+.mba-locpicker { display: grid; gap: 12px; padding-bottom: 8px; }
+.mba-locpicker__hint { font-size: 0.84rem; color: var(--text-faint); }
+.mba-locpicker__results { display: grid; gap: 4px; }
+.mba-locpicker__results button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 12px;
+  border: none;
+  border-radius: var(--radius-m);
+  background: var(--surface-2);
+  text-align: left;
+  font-size: 0.92rem;
+}
+.mba-locpicker__results button:hover { background: var(--border); }
+.mba-locpicker__results svg { color: var(--brand-500); flex-shrink: 0; }

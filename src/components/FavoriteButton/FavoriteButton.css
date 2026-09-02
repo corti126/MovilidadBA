@@ -1,0 +1,13 @@
+.mba-favorite {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--text-faint);
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.mba-favorite:hover { background: var(--surface-2); color: var(--text-soft); }
+.mba-favorite.is-active { color: var(--danger); }

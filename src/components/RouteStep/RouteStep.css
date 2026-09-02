@@ -1,0 +1,15 @@
+.mba-step { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; }
+.mba-step__rail { display: grid; justify-items: center; }
+.mba-step__icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--brand-500);
+  color: #fff;
+}
+.mba-step__line { width: 2px; flex: 1; min-height: 16px; background: var(--border); }
+.mba-step__text { display: grid; padding-bottom: 14px; min-width: 0; }
+.mba-step__title { font-weight: 600; }
+.mba-step__detail { font-size: 0.83rem; color: var(--text-faint); }

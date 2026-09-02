@@ -1,0 +1,24 @@
+.mba-skeleton-list { display: grid; gap: 10px; }
+.mba-skeleton {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  border-radius: var(--radius-l);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.mba-skeleton__line {
+  display: block;
+  height: 12px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, var(--surface-2), var(--border), var(--surface-2));
+  background-size: 200% 100%;
+  animation: mba-shimmer 1.4s ease-in-out infinite;
+}
+.mba-skeleton__line--sm { width: 30%; }
+.mba-skeleton__line--md { width: 55%; }
+.mba-skeleton__line--lg { width: 80%; height: 18px; }
+@keyframes mba-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

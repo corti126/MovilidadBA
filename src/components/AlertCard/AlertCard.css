@@ -1,0 +1,37 @@
+.mba-alertcard {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 13px 14px;
+  text-align: left;
+  border: 1px solid color-mix(in oklab, var(--danger) 28%, transparent);
+  border-radius: var(--radius-l);
+  background: var(--danger-bg);
+  color: var(--text);
+}
+.mba-alertcard + .mba-alertcard { margin-top: 8px; }
+.mba-alertcard__icon { color: var(--danger); display: grid; place-items: center; }
+.mba-alertcard__text { display: grid; min-width: 0; }
+.mba-alertcard__line { font-weight: 700; }
+.mba-alertcard__status {
+  font-size: 0.84rem;
+  color: var(--danger);
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mba-alertcard__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--danger);
+  white-space: nowrap;
+}
+@media (max-width: 360px) {
+  .mba-alertcard__cta span { display: none; }
+}

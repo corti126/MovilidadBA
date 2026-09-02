@@ -1,0 +1,14 @@
+.mba-promos__notice {
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border-radius: var(--radius-m);
+  background: var(--warn-bg);
+  color: var(--warn);
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+.mba-promos__notice code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.8rem; }
+.mba-promos__list { display: grid; gap: 12px; margin-top: 14px; }
+@media (min-width: 768px) {
+  .mba-promos__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

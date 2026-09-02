@@ -1,0 +1,16 @@
+.mba-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.76rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.mba-status--ok { background: var(--ok-bg); color: var(--ok); }
+.mba-status--warn { background: var(--warn-bg); color: var(--warn); }
+.mba-status--danger { background: var(--danger-bg); color: var(--danger); }
+.mba-status--info { background: var(--info-bg); color: var(--info); }
+.mba-status--neutral { background: var(--neutral-bg); color: var(--neutral); }
+.mba-status.is-compact { padding: 3px 8px; font-size: 0.72rem; }

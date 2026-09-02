@@ -1,0 +1,50 @@
+.mba-linecard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-sm);
+  padding-right: 6px;
+}
+.mba-linecard__main {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 12px 8px 12px 14px;
+  border: none;
+  background: none;
+  text-align: left;
+}
+.mba-linecard__mark {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+.mba-linecard__text { display: grid; min-width: 0; }
+.mba-linecard__name {
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mba-linecard__sub {
+  font-size: 0.8rem;
+  color: var(--text-faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mba-linecard__chevron { color: var(--text-faint); }
+@media (max-width: 380px) {
+  .mba-linecard__chevron { display: none; }
+}

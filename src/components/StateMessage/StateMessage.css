@@ -1,0 +1,25 @@
+.mba-state {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 28px 20px;
+  text-align: center;
+  border-radius: var(--radius-l);
+  background: var(--surface);
+  border: 1px dashed var(--border);
+}
+.mba-state__icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: var(--radius-full);
+  background: var(--surface-2);
+  color: var(--text-soft);
+}
+.mba-state h3 { font-size: 1rem; font-weight: 700; }
+.mba-state p { font-size: 0.88rem; color: var(--text-soft); max-width: 34ch; }
+.mba-state__action { margin-top: 6px; }
+.mba-state--danger .mba-state__icon { background: var(--danger-bg); color: var(--danger); }
+.mba-state--warn .mba-state__icon { background: var(--warn-bg); color: var(--warn); }
+.mba-state--brand .mba-state__icon { background: var(--brand-050); color: var(--brand-500); }

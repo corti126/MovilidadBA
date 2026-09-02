@@ -1,0 +1,18 @@
+.mba-section-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  margin: 26px 0 12px;
+}
+.mba-section-header__text { min-width: 0; }
+.mba-section-header h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.mba-section-header p {
+  margin-top: 2px;
+  font-size: 0.82rem;
+  color: var(--text-faint);
+}

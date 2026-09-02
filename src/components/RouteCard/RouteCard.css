@@ -1,0 +1,23 @@
+.mba-routecard {
+  padding: 16px 18px;
+  border-radius: var(--radius-l);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+.mba-routecard__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.mba-routecard__flag {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--brand-500);
+}
+.mba-routecard__total { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; }
+.mba-routecard__steps { display: grid; }

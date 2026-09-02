@@ -1,0 +1,10 @@
+.mba-spinner { display: inline-grid; place-items: center; }
+.mba-spinner__ring {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  border-top-color: var(--brand-500);
+  animation: mba-spin 0.8s linear infinite;
+}
+@keyframes mba-spin { to { transform: rotate(360deg); } }

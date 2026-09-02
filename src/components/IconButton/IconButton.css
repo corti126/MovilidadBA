@@ -1,0 +1,20 @@
+.mba-icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-soft);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.mba-icon-button:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+.mba-icon-button.is-active {
+  background: var(--brand-050);
+  color: var(--brand-500);
+  border-color: transparent;
+}

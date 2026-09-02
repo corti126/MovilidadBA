@@ -1,0 +1,12 @@
+{
+  // Proxy de MovilidadBA para la API oficial de Transporte de Buenos Aires.
+  // Desplegar con:  npx wrangler deploy   (dentro de la carpeta worker/)
+  // Cargar secretos con:
+  //   npx wrangler secret put MOVILIDADBA_CLIENT_ID
+  //   npx wrangler secret put MOVILIDADBA_CLIENT_SECRET
+  "name": "movilidadba-proxy",
+  "main": "index.js",
+  "compatibility_date": "2025-01-01",
+  "observability": { "enabled": true }
+  // No incluir credenciales en este archivo: siempre usar `wrangler secret put`.
+}
