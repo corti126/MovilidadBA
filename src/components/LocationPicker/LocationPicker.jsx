@@ -1,9 +1,8 @@
 import { LocateFixed, MapPin } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { useDebounce } from "../../hooks/useDebounce";
+import { useAddressSearch } from "../../hooks/useAddressSearch";
 import { useGeolocation } from "../../hooks/useGeolocation";
-import { searchAddress } from "../../services/usigApi";
 import { Button } from "../Button/Button";
 import { BottomSheet } from "../BottomSheet/BottomSheet";
 import { SearchBar } from "../SearchBar/SearchBar";
@@ -12,27 +11,8 @@ import "./LocationPicker.css";
 export function LocationPicker({ open, onClose }) {
   const { request, status, setLocation } = useGeolocation();
   const [query, setQuery] = useState("");
-  const debounced = useDebounce(query, 400);
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { results, loading, error, debounced } = useAddressSearch(query, { enabled: open });
 
-  useEffect(() => {
-    if (!open || debounced.trim().length < 3) {
-      setResults([]);
-      return undefined;
-    }
-    const controller = new AbortController();
-    setLoading(true);
-    setError(null);
-    searchAddress(debounced, { signal: controller.signal })
-      .then(setResults)
-      .catch((err) => {
-        if (err?.name !== "AbortError") setError("No pudimos buscar esa dirección.");
-      })
-      .finally(() => setLoading(false));
-    return () => controller.abort();
-  }, [debounced, open]);
 
   return (
     <BottomSheet open={open} title="Tu ubicación" onClose={onClose}>

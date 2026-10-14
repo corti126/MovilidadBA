@@ -7,10 +7,10 @@ import { SearchBar } from "../../components/SearchBar/SearchBar";
 import { SectionHeader } from "../../components/SectionHeader/SectionHeader";
 import { StateMessage } from "../../components/StateMessage/StateMessage";
 import { useApp } from "../../context/AppContext";
-import { useDebounce } from "../../hooks/useDebounce";
+import { useAddressSearch } from "../../hooks/useAddressSearch";
 import { useGeolocation } from "../../hooks/useGeolocation";
 import { getRouteOptions } from "../../services/transportApi";
-import { searchAddress } from "../../services/usigApi";
+import { getNearbyStations } from "../../data/subteStations";
 import { getRecentSearches, saveRecentSearches } from "../../utils/storage";
 import "./RoutePlanner.css";
 
@@ -19,43 +19,41 @@ export function RoutePlanner() {
   const { request } = useGeolocation();
   const [destination, setDestination] = useState(null);
   const [query, setQuery] = useState("");
-  const debounced = useDebounce(query, 400);
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [plan, setPlan] = useState(null);
+  const [planError, setPlanError] = useState(null);
   const [recent, setRecent] = useState([]);
+
+  // Cuando ya se eligió un destino, el texto del input es esa dirección:
+  // se omite la búsqueda para no volver a llamar a la API en bucle.
+  const { results, loading, error } = useAddressSearch(query, {
+    skip: destination?.label ?? null,
+  });
 
   useEffect(() => {
     setRecent(getRecentSearches());
   }, []);
 
-  useEffect(() => {
-    if (debounced.trim().length < 3) {
-      setResults([]);
-      return undefined;
-    }
-    const controller = new AbortController();
-    setLoading(true);
-    searchAddress(debounced, { signal: controller.signal })
-      .then(setResults)
-      .catch(() => setResults([]))
-      .finally(() => setLoading(false));
-    return () => controller.abort();
-  }, [debounced]);
-
   const chooseDestination = (result) => {
     setDestination(result);
     setQuery(result.label);
-    setResults([]);
     const next = [result, ...recent.filter((item) => item.label !== result.label)];
     setRecent(next);
     saveRecentSearches(next);
   };
 
   const searchRoutes = async () => {
-    const response = await getRouteOptions({ origin: location, destination });
-    setPlan(response);
+    setPlanError(null);
+    try {
+      const response = await getRouteOptions({ origin: location, destination });
+      setPlan(response);
+    } catch {
+      setPlan(null);
+      setPlanError("No pudimos calcular el viaje ahora mismo. Intentá de nuevo en unos minutos.");
+    }
   };
+
+  // Calcular estaciones cercanas al origen para mostrar en el planificador
+  const nearbyStations = location ? getNearbyStations(location.lat, location.lon, 1500) : [];
 
   return (
     <div className="mba-page mba-planner">
@@ -88,7 +86,9 @@ export function RoutePlanner() {
         </div>
       </div>
 
-      {results.length ? (
+      {error ? <p className="mba-planner__hint">{error}</p> : null}
+
+      {destination == null && results.length ? (
         <ul className="mba-planner__results">
           {results.map((result) => (
             <li key={result.id}>
@@ -101,16 +101,48 @@ export function RoutePlanner() {
         </ul>
       ) : null}
 
+      {nearbyStations.length > 0 && location ? (
+        <div className="mba-planner__nearby">
+          <SectionHeader title="Estaciones cercanas" />
+          <ul className="mba-planner__stations">
+            {nearbyStations.slice(0, 5).map((station) => (
+              <li key={station.id}>
+                <button
+                  type="button"
+                  onClick={() =>
+                    chooseDestination({
+                      label: station.name + " (Línea " + station.line + ")",
+                      lat: station.lat,
+                      lon: station.lon,
+                    })
+                  }
+                >
+                  <MapPin size={15} aria-hidden="true" />
+                  {station.name}
+                  <span className="mba-planner__station-line">Línea {station.line}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
       <Button full disabled={!location || !destination} onClick={searchRoutes}>
         Buscar rutas
       </Button>
+
+      {planError ? (
+        <div className="mba-planner__unavailable">
+          <StateMessage tone="warn" title="No se pudo buscar" description={planError} />
+        </div>
+      ) : null}
 
       {plan?.unavailable ? (
         <div className="mba-planner__unavailable">
           <StateMessage
             tone="warn"
-            title="Planificador todavía no conectado"
-            description={plan.reason}
+            title="Planificador no disponible"
+            description={plan.reason || "El planificador de viajes no está implementado en esta versión."}
           />
         </div>
       ) : null}

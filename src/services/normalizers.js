@@ -4,18 +4,18 @@ import { findTrenLine } from "../data/trenLines";
 
 /** GTFS-RT serviceAlerts (JSON) -> TransportAlert[] de MovilidadBA. */
 export function normalizeAlerts(payload, mode) {
-  const entities = payload?.entity || payload?.Entity || [];
+  const entities = payload?.entity || payload?.Entity || payload?._entity || [];
   if (!Array.isArray(entities)) return [];
 
   return entities
     .map((entity, index) => {
-      const alert = entity.alert || entity.Alert;
+      const alert = entity.alert || entity.Alert || entity._alert;
       if (!alert) return null;
-      const header = pickText(alert.header_text || alert.headerText);
-      const description = pickText(alert.description_text || alert.descriptionText);
-      const informed = alert.informed_entity || alert.informedEntity || [];
+      const header = pickText(alert.header_text || alert.headerText || alert._header_text);
+      const description = pickText(alert.description_text || alert.descriptionText || alert._description_text);
+      const informed = alert.informed_entity || alert.informedEntity || alert._informed_entity || [];
       const routeId = Array.isArray(informed)
-        ? informed.map((i) => i.route_id || i.routeId).find(Boolean)
+        ? informed.map((i) => i.route_id || i.routeId || i._route_id).find(Boolean)
         : null;
       const line =
         mode === "subte" ? findSubteLine(routeId) : mode === "tren" ? findTrenLine(routeId) : null;
@@ -28,8 +28,8 @@ export function normalizeAlerts(payload, mode) {
         title: header || "Aviso del servicio",
         description: description || null,
         status: statusFromAlertText([header, description].filter(Boolean).join(" ")),
-        updatedAt: toMillis(entity.timestamp ?? payload?.header?.timestamp),
-        activePeriod: normalizePeriod(alert.active_period || alert.activePeriod),
+        updatedAt: toMillis(entity.timestamp ?? payload?.header?.timestamp ?? payload?.Header?.timestamp),
+        activePeriod: normalizePeriod(alert.active_period || alert.activePeriod || alert._active_period),
       };
     })
     .filter(Boolean);
@@ -38,16 +38,16 @@ export function normalizeAlerts(payload, mode) {
 function normalizePeriod(period) {
   const first = Array.isArray(period) ? period[0] : period;
   if (!first) return null;
-  return { start: toMillis(first.start), end: toMillis(first.end) };
+  return { start: toMillis(first.start ?? first._start), end: toMillis(first.end ?? first._end) };
 }
 
 function pickText(field) {
   if (!field) return null;
   if (typeof field === "string") return field;
-  const translations = field.translation || field.Translation;
+  const translations = field.translation || field.Translation || field._translation;
   if (Array.isArray(translations) && translations.length) {
-    const es = translations.find((t) => (t.language || "").startsWith("es"));
-    return (es || translations[0]).text || null;
+    const es = translations.find((t) => (t.language || t._language || "").startsWith("es"));
+    return (es || translations[0]).text || translations[0]._text || null;
   }
   return null;
 }
@@ -91,8 +91,10 @@ export function normalizeSubteForecast(payload) {
 
 /** vehiclePositionsSimple de colectivos -> vehículos normalizados. */
 export function normalizeColectivos(payload) {
-  const list = Array.isArray(payload) ? payload : payload?.vehicles || [];
-  return list
+  // Si el payload no es un array, devolvemos vacío
+  if (!Array.isArray(payload)) return [];
+  
+  return payload
     .map((vehicle, index) => {
       const lat = Number(vehicle.latitude ?? vehicle.lat);
       const lon = Number(vehicle.longitude ?? vehicle.lon ?? vehicle.lng);

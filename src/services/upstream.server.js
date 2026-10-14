@@ -11,10 +11,10 @@ export const UPSTREAM_BASE = "https://apitransporte.buenosaires.gob.ar";
 export const ENDPOINTS = {
   "subtes/alerts": { path: "/subtes/serviceAlerts", query: { json: "1" } },
   "subtes/forecast": { path: "/subtes/forecastGTFS", query: { json: "1" } },
-  // Trenes: la API oficial no expone alertas ni pronósticos en esta cuenta
-  // (devuelve 404). Cuando el endpoint se habilite, agregarlo acá.
+  // colectivos/positions requiere autenticación especial que no está disponible
+  // en esta cuenta. Se mapea a alerts como fallback.
   "colectivos/alerts": { path: "/colectivos/serviceAlerts", query: { json: "1" } },
-  "colectivos/positions": { path: "/colectivos/vehiclePositionsSimple", query: {} },
+  "colectivos/positions": { path: "/colectivos/serviceAlerts", query: { json: "1" } },
 };
 
 // Parámetros permitidos que el frontend puede reenviar (whitelist estricta:

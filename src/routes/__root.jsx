@@ -39,6 +39,14 @@ export const Route = createRootRouteWithContext()({
 });
 
 function RootShell({ children }) {
+  // En una SPA clásica, main.jsx monta RouterProvider dentro de #root. En ese
+  // modo no se pueden renderizar otro <html>, <head> y <body> dentro del div:
+  // React termina reconciliando un árbol HTML inválido ante el primer cambio
+  // de estado (por ejemplo, la primera tecla de un input).
+  if (typeof document !== "undefined" && document.documentElement.dataset.mbaSpa === "true") {
+    return children;
+  }
+
   return (
     <html lang="es">
       <head>

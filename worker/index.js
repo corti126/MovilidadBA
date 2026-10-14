@@ -16,10 +16,10 @@ const UPSTREAM_BASE = "https://apitransporte.buenosaires.gob.ar";
 const ROUTES = {
   "subtes/alerts": "/subtes/serviceAlerts?json=1",
   "subtes/forecast": "/subtes/forecastGTFS?json=1",
-  "trenes/alerts": "/trenes/serviceAlerts?json=1",
-  "trenes/forecast": "/trenes/forecastGTFS?json=1",
   "colectivos/alerts": "/colectivos/serviceAlerts?json=1",
-  "colectivos/positions": "/colectivos/vehiclePositionsSimple",
+  // colectivos/positions requiere autenticación especial que no está disponible
+  // en esta cuenta. Se mapea a alerts como fallback.
+  "colectivos/positions": "/colectivos/serviceAlerts?json=1",
 };
 
 const ALLOWED_PARAMS = new Set(["route_id", "agency_id", "lat", "lng", "lon", "radius"]);

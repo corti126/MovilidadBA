@@ -12,6 +12,7 @@ export function useTransport(fetcher, { intervalMs = 30000, enabled = true, deps
     updatedAt: null,
   });
   const requestId = useRef(0);
+  const failures = useRef(0);
   const fetcherRef = useRef(fetcher);
   fetcherRef.current = fetcher;
 
@@ -21,9 +22,11 @@ export function useTransport(fetcher, { intervalMs = 30000, enabled = true, deps
     try {
       const data = await fetcherRef.current({ signal });
       if (id !== requestId.current) return;
+      failures.current = 0;
       setState({ data, loading: false, error: null, updatedAt: Date.now() });
     } catch (error) {
       if (error?.name === "AbortError" || id !== requestId.current) return;
+      failures.current += 1;
       setState((prev) => ({
         data: prev.data,
         loading: false,
@@ -33,6 +36,7 @@ export function useTransport(fetcher, { intervalMs = 30000, enabled = true, deps
     }
   }, []);
 
+
   useEffect(() => {
     if (!enabled) return undefined;
     const controller = new AbortController();
@@ -40,8 +44,16 @@ export function useTransport(fetcher, { intervalMs = 30000, enabled = true, deps
 
     const timer = setInterval(() => {
       if (typeof document !== "undefined" && document.visibilityState !== "visible") return;
+      if (typeof navigator !== "undefined" && navigator.onLine === false) return;
+      // Backoff: tras 3 fallos seguidos se espacian los reintentos automáticos
+      // (1 de cada 4 ciclos) para no golpear una API caída.
+      if (failures.current >= 3 && failures.current % 4 !== 0) {
+        failures.current += 1;
+        return;
+      }
       run(controller.signal);
     }, intervalMs);
+
 
     return () => {
       controller.abort();

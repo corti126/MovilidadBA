@@ -1,0 +1,6 @@
+# Credenciales para desarrollo local con `wrangler dev`
+# Copia este archivo a .dev.vars y completa con tus credenciales reales
+# Obtenelas en: https://apitransporte.buenosaires.gob.ar/console/
+
+MOVILIDADBA_CLIENT_ID=tu_client_id_aqui
+MOVILIDADBA_CLIENT_SECRET=tu_client_secret_aqui

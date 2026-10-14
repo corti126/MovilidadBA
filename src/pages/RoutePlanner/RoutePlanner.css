@@ -50,3 +50,9 @@
 .mba-planner__recent svg { color: var(--brand-500); flex-shrink: 0; }
 .mba-planner__unavailable,
 .mba-planner__options { margin-top: 16px; display: grid; gap: 12px; }
+
+.mba-planner__hint {
+  font-size: 0.84rem;
+  color: var(--text-faint);
+  margin: 4px 2px 0;
+}

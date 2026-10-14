@@ -16,6 +16,7 @@ import { useApp } from "../../context/AppContext";
 import { useGeolocation } from "../../hooks/useGeolocation";
 import { useTransport } from "../../hooks/useTransport";
 import { getAlerts, getColectivosNearby, getSubtePredictions } from "../../services/transportApi";
+import { getNearbyStations } from "../../data/subteStations";
 import { haversineMeters, walkingMinutes } from "../../utils/distance";
 import { formatDistance, formatMinutes, formatRelativeUpdate } from "../../utils/formatters";
 import { STATUS, isDisruptive } from "../../utils/serviceStatus";
@@ -76,6 +77,27 @@ export function Nearby({ onOpenLocation }) {
     if (!data) return [];
     const list = [];
 
+    if (location && (filter === "all" || filter === "subte")) {
+      const stations = getNearbyStations(location.lat, location.lon, 1500);
+      stations.forEach((station) => {
+        list.push({
+          id: "subte-station-" + station.id,
+          mode: "subte",
+          badge: "Subte",
+          color: getLineColor(station.line),
+          title: station.name,
+          subtitle: "Línea " + station.line,
+          distanceMeters: station.distance,
+          walkMinutes: walkingMinutes(station.distance),
+          waitMinutes: null,
+          realtime: false,
+          status: STATUS.NORMAL,
+          favorite: { id: "line:subte-" + station.line, kind: "line", mode: "subte", label: "Línea " + station.line },
+          detail: station,
+        });
+      });
+    }
+
     const bestBySubteLine = new Map();
     data.predictions.forEach((prediction) => {
       const minutes = minutesUntil(prediction.arrivalAt);
@@ -104,6 +126,7 @@ export function Nearby({ onOpenLocation }) {
       });
     });
 
+    // Agregar colectivos cercanos
     if (location) {
       const grouped = new Map();
       data.vehicles.forEach((vehicle) => {
@@ -267,4 +290,16 @@ export function Nearby({ onOpenLocation }) {
       </BottomSheet>
     </div>
   );
+}
+
+function getLineColor(line) {
+  const colors = {
+    A: "#00a6d6",
+    B: "#e62429",
+    C: "#0072bc",
+    D: "#00843d",
+    E: "#7b2d8b",
+    H: "#f7b500",
+  };
+  return colors[line] || "#666";
 }
